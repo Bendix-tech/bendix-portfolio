@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bendix Fesefeldt</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>😈</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    /*
+      DotMatrix Regular is loaded via local() below.
+      If the font isn't installed on the visitor's machine, place
+      DotMatrix-Regular.woff2 (and/or .woff) next to this file and
+      uncomment the url() lines in the @font-face rule.
+    */
+    @font-face {
+      font-family: 'DotMatrix';
+      font-weight: 400;
+      font-style: normal;
+      src:
+        local('DotMatrix Regular'),
+        local('DotMatrix-Regular'),
+        local('DotMatrix'),
+        /* url('DotMatrix-Regular.woff2') format('woff2'),
+           url('DotMatrix-Regular.woff')  format('woff'), */
+        monospace;
+    }
+
+    /* ─── Reset ──────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:   #150810;
+      --muted: #7a2838;
+      --rule:  transparent;
+      --px:    clamp(1.25rem, 5vw, 3.5rem);
+      --mono:  'Inconsolata', 'Courier New', monospace;
+      --dot:   'DotMatrix', 'Courier New', monospace;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden; /* no page scroll — each section is its own view */
+    }
+
+    body {
+      background:
+        radial-gradient(ellipse 80% 70% at 15% 20%,  #f9a8c0 0%, transparent 65%),
+        radial-gradient(ellipse 60% 80% at 85% 10%,  #f472a0 0%, transparent 60%),
+        radial-gradient(ellipse 90% 60% at 60% 80%,  #f07090 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 30% 75%,  #fbc8d8 0%, transparent 55%),
+        radial-gradient(ellipse 70% 90% at 90% 60%,  #e85080 0%, transparent 65%),
+        #f5809a;
+      background-attachment: fixed;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: clamp(0.85rem, 1.35vw, 0.95rem);
+      font-weight: 400;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ─── Top bar ─────────────────────────────────────────────────── */
+    header {
+      flex-shrink: 0;
+      background: transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1.5rem;
+      padding: 0.9rem var(--px);
+      z-index: 10;
+    }
+
+    header .site-name {
+      font-family: var(--dot);
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    header .site-name:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    header nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1.5rem;
+    }
+
+    header nav a {
+      font-family: var(--mono);
+      font-size: clamp(0.85rem, 1.5vw, 1rem);
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      cursor: pointer;
+    }
+
+    header nav a:hover,
+    header nav a.active {
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    header nav a.active {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ─── Section shell ───────────────────────────────────────────── */
+    .section {
+      display: none;         /* hidden by default */
+      flex: 1;
+      overflow-y: auto;      /* scroll within section if content is tall */
+      padding: 4rem var(--px);
+    }
+
+    .section.active { display: block; }
+
+    /* ─── Section heading ─────────────────────────────────────────── */
+    .section-heading {
+      font-family: var(--dot);
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ─── Hero ────────────────────────────────────────────────────── */
+    #home {
+      padding: 0;
+      overflow: hidden;
+      background-image: url('Firefly.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    #home .photo-slot {
+      width: 100%;
+      height: 100%;
+    }
+
+    #home .photo-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ─── Biography ───────────────────────────────────────────────── */
+    #biography {
+      padding-bottom: 0;
+    }
+
+    #biography .bio-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    #biography .bio-image {
+      /* pull image up so eyes align with first text line */
+      margin-top: calc(-1 * (clamp(1.6rem, 4vw, 2.8rem) + 2.5rem + 3rem));
+    }
+
+    #biography .bio-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @media (max-width: 800px) {
+      #biography .bio-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    #biography .bio-text p {
+      margin-bottom: 1.1em;
+    }
+
+    #biography .bio-text p:last-child { margin-bottom: 0; }
+
+    /* links visible but muted */
+    #biography .bio-text a {
+      color: #9a7882;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    #biography .bio-text a:hover {
+      color: var(--ink);
+    }
+
+
+    @media (max-width: 800px) {
+      #biography .bio-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    /* ─── Projects ────────────────────────────────────────────────── */
+    #projects .project-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project {
+      display: block;
+      padding: 0.4rem 0;
+    }
+
+    .project .year {
+      font-size: clamp(0.85rem, 1.35vw, 0.95rem);
+      color: var(--muted);
+      display: inline;
+      margin-right: 0.6em;
+    }
+
+    .project-body .title .role {
+      color: var(--muted);
+    }
+
+    .project-body .title a {
+      color: #9a7882;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .project-body .title a:hover {
+      color: var(--ink);
+    }
+
+    .project-body {
+      display: inline;
+    }
+
+    .project-body .title {
+      font-family: var(--dot);
+      font-size: clamp(0.85rem, 1.35vw, 0.95rem);
+      letter-spacing: 0.03em;
+      display: inline;
+    }
+
+    .project-body .meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .project-body p {
+      font-size: 0.85rem;
+      max-width: 60ch;
+    }
+
+    /* ─── Institutional Work ──────────────────────────────────────── */
+    #institutional .inst-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    #institutional .inst-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #institutional .inst-directors {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+      padding-top: 1.4rem;
+    }
+
+    #institutional .collab-heading {
+      font-family: var(--dot);
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      text-align: left;
+      margin-bottom: 2.5rem;
+    }
+
+    .director-entry .director-name {
+      font-family: var(--dot);
+      font-size: clamp(0.9rem, 1.4vw, 1rem);
+      letter-spacing: 0.03em;
+      margin-bottom: 0.35rem;
+    }
+
+    .director-entry .production {
+      font-size: clamp(0.85rem, 1.35vw, 0.95rem);
+      line-height: 1.55;
+    }
+
+    .director-entry .production .prod-title {
+      color: var(--ink);
+    }
+
+    .director-entry .production .prod-meta {
+      color: var(--muted);
+    }
+
+    .director-entry .note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    @media (max-width: 800px) {
+      #institutional .inst-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .inst-item {
+      display: grid;
+      grid-template-columns: 4.5rem 1fr;
+      gap: 0 2rem;
+      padding: 1.4rem 0;
+    }
+
+    .inst-item .period {
+      font-size: clamp(0.85rem, 1.35vw, 0.95rem);
+      color: var(--muted);
+      padding-top: 0.15em;
+      white-space: nowrap;
+    }
+
+    .inst-body .name {
+      font-family: var(--dot);
+      font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+      letter-spacing: 0.03em;
+      margin-bottom: 0.2rem;
+    }
+
+    .inst-body .role {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .inst-body a {
+      color: #9a7882;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .inst-body a:hover {
+      color: var(--ink);
+    }
+
+    .inst-body p {
+      font-size: clamp(0.85rem, 1.35vw, 0.95rem);
+      max-width: 60ch;
+    }
+
+    /* ─── Contact ─────────────────────────────────────────────────── */
+    #contact .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    #contact .contact-image {
+      overflow: hidden;
+    }
+
+    #contact .contact-image img {
+      width: clamp(200px, 30vw, 360px);
+      height: auto;
+      display: block;
+    }
+
+    @media (max-width: 800px) {
+      #contact .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    /* ─── Mobile ──────────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .project,
+      .inst-item {
+        grid-template-columns: 1fr;
+        gap: 0.2rem;
+      }
+
+      .project .year,
+      .inst-item .period { font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header>
+    <span class="site-name" data-target="home">Bendix Fesefeldt</span>
+    <nav>
+      <a data-target="projects">Projects</a>
+      <a data-target="institutional">Institutional Work</a>
+      <a data-target="biography">Biography</a>
+      <a data-target="contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Home -->
+  <div class="section" id="home">
+    <div class="photo-slot">
+      <!-- Add your photo: <img src="photo.jpg" alt="Bendix Fesefeldt" /> -->
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div class="section" id="projects">
+    <h2 class="section-heading">Projects</h2>
+    <div class="project-list">
+
+      <div class="project">
+        <span class="year">2026</span>
+        <div class="project-body">
+          <div class="title"><a href="https://teatrosociale.ch/Mofo-a006e800?continuaForceCalendarTutte=521_6c8166e8b0" target="_blank" rel="noopener">MOFO</a> by Rocco Schira (Bellinzona / Lugano) <span class="role">dramaturg</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <span class="year">2025</span>
+        <div class="project-body">
+          <div class="title"><a href="https://www.londonperformancestudios.com/the-whole-routine" target="_blank" rel="noopener">The Whole Routine</a> by Thomas Edwardsson (London) <span class="role">dramaturg</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <span class="year">2025</span>
+        <div class="project-body">
+          <div class="title"><a href="https://www.bellesantos.net/morning_time/" target="_blank" rel="noopener">Morning Time</a> by Belle Santos (Kyoto / Berlin) <span class="role">dramaturg</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <span class="year">2023</span>
+        <div class="project-body">
+          <div class="title"><a href="https://www.bellesantos.net/the-wake/" target="_blank" rel="noopener">The Wake</a> by Belle Santos (Berlin) <span class="role">performer</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <span class="year">2022</span>
+        <div class="project-body">
+          <div class="title"><a href="https://archiv.theaterneumarkt.ch/archiv/2022-23/red/" target="_blank" rel="noopener">RED</a> by Brandy Butler (Zurich) <span class="role">co-concept and author</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <span class="year">2022</span>
+        <div class="project-body">
+          <div class="title"><a href="https://www.sultan-coban.com/11081593/second-solo-show-2022" target="_blank" rel="noopener">Second Solo Show</a> by Sultan &Ccedil;oban (Z&uuml;rich) <span class="role">performer and dramaturg</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <span class="year">2021</span>
+        <div class="project-body">
+          <div class="title"><a href="http://klimakriseklitoris.de/" target="_blank" rel="noopener">Klima/Krise/Klitoris</a> by Marie Baumgarten and collective (Berlin) <span class="role">performer and dramaturg</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Institutional Work -->
+  <div class="section" id="institutional">
+    <div class="inst-layout">
+    <div>
+    <h2 class="section-heading">Institutional<br />Work</h2>
+    <div class="inst-list">
+
+      <div class="inst-item">
+        <span class="period">2019&ndash;20</span>
+        <div class="inst-body">
+          <div class="name"><a href="https://www.residenztheater.de/en/" target="_blank" rel="noopener">Residenztheater</a></div>
+          <p>Bendix Fesefeldt was part of the preparatory team for the new artistic directorship under Andreas Beck in Munich, where he then worked as a dramaturg from 2019 to 2020. During the coronavirus pandemic, he conceived and curated <a href="https://www.residenztheater.de/en/translate-to-english-resi-ruft-an" target="_blank" rel="noopener">Resi ruft an</a> and was responsible for its implementation.</p>
+        </div>
+      </div>
+
+      <div class="inst-item">
+        <span class="period">2020&ndash;25</span>
+        <div class="inst-body">
+          <div class="name"><a href="https://www.schauspielhaus.ch/en/" target="_blank" rel="noopener">Schauspielhaus Zürich</a></div>
+          <p>In 2020, he moved to Zürich as a dramaturg under the artistic direction of Benjamin von Blomberg and Nicolas Stemann. There, he was involved in several institutional change processes, often in the DEI (Diversity, Equity and Inclusion) area; for instance, he developed the staff tool &#8220;timezeit&#8221; to encourage greater interaction between different departments through flexible working hours. He was responsible for liaising between the ensemble and the theatre, as well as for the recruitment procedures for assistants. He conceived the opening, premiere and farewell parties, curated and moderated various panels, and organised staged readings. To counter declining audience numbers, he developed an <a href="https://www.schauspielhaus.ch/en/kalender/28602/audience-summit-theatre-and-change" target="_blank" rel="noopener">Audience Summit</a>, where interested parties engage in conversation with representatives of Zurich&#8217;s cultural scene at round-table discussions, whilst out walking, and over meals.</p>
+        </div>
+      </div>
+
+    </div>
+    </div>
+
+    <div>
+    <div class="collab-heading">Dramaturgical<br />Collaboration</div>
+    <div class="inst-directors">
+
+      <div class="director-entry">
+        <div class="director-name">Alexander Giesche</div>
+        <div class="production"><a href="https://www.schauspielhaus.ch/en/kalender/27046/moise-und-die-welt-der-vernunft" target="_blank" rel="noopener"><span class="prod-title">Moise und die Welt der Vernunft</span></a><span class="prod-meta">, 2024, Pfauen, Schauspielhaus Zürich</span></div>
+        <div class="production"><a href="https://www.schauspielhaus.ch/en/kalender/18593/afterhour" target="_blank" rel="noopener"><span class="prod-title">AFTERHOUR</span></a><span class="prod-meta">, 2021, Schiffbau-Box, Schauspielhaus Zürich</span></div>
+      </div>
+
+      <div class="director-entry">
+        <div class="director-name">Barbara Weber</div>
+        <div class="production"><a href="https://www.schauspielhaus.ch/en/kalender/30567/prima-facie" target="_blank" rel="noopener"><span class="prod-title">Prima Facie</span></a><span class="prod-meta">, 2025, Pfauen, Schauspielhaus Zürich</span></div>
+      </div>
+
+      <div class="director-entry">
+        <div class="director-name">Bastian Kraft</div>
+        <div class="production"><a href="https://www.schauspielhaus.ch/en/kalender/30696/die-kleine-meerjungfrau" target="_blank" rel="noopener"><span class="prod-title">Die kleine Meerjungfrau</span></a><span class="prod-meta">, 2025, Pfauen, Schauspielhaus Zürich / 2026 Thalia Theater Hamburg</span></div>
+        <div class="production"><a href="https://www.residenztheater.de/en/stuecke/detail/lulu" target="_blank" rel="noopener"><span class="prod-title">Lulu</span></a><span class="prod-meta">, 2019, Marstall, Residenztheater</span></div>
+      </div>
+
+      <div class="director-entry">
+        <div class="director-name">Christiane Jatahy</div>
+        <div class="production"><a href="https://www.schauspielhaus.ch/en/kalender/26947/der-junge-aus-der-letzten-reihe" target="_blank" rel="noopener"><span class="prod-title">Der Junge aus der letzten Reihe</span></a><span class="prod-meta">, 2023, Schiffbau-Box, Schauspielhaus Zürich</span></div>
+        <div class="production"><a href="https://christianejatahy.com/en/creation/before-the-sky-falls/" target="_blank" rel="noopener"><span class="prod-title">Before the Sky Falls</span></a><span class="prod-meta">, 2021, Pfauen, Schauspielhaus Zürich</span></div>
+      </div>
+
+      <div class="director-entry">
+        <div class="director-name">Gernot Grünewald</div>
+        <div class="production"><span class="prod-title">Vier Tage im Juli</span><span class="prod-meta">, 2018, Box, Deutsches Theater Berlin</span></div>
+        <div class="production"><span class="prod-title">Lesbos – Blackbox Europa</span><span class="prod-meta">, 2017, Box, Deutsches Theater Berlin</span></div>
+      </div>
+
+      <div class="director-entry">
+        <div class="director-name">Karin Henkel</div>
+        <div class="production"><a href="https://www.residenztheater.de/en/stuecke/detail/medea" target="_blank" rel="noopener"><span class="prod-title">Medea</span></a><span class="prod-meta">, 2020, Residenztheater</span></div>
+        <div class="production"><a href="https://www.schauspielhaus.ch/de/archiv/15462/beute-frauen-krieg" target="_blank" rel="noopener"><span class="prod-title">Beute Frauen Krieg</span></a><span class="prod-meta">, 2017, Schiffbau-Halle, Schauspielhaus Zürich</span></div>
+        <div class="note">eingeladen zum Theatertreffen 2018</div>
+      </div>
+
+
+      <div class="director-entry">
+        <div class="director-name">Milo Rau</div>
+        <div class="production"><a href="https://www.schauspielhaus.ch/en/kalender/21438/wilhelm-tell" target="_blank" rel="noopener"><span class="prod-title">Wilhelm Tell</span></a><span class="prod-meta">, 2022, Pfauen, Schauspielhaus Zürich</span></div>
+      </div>
+
+      <div class="director-entry">
+        <div class="director-name">Nicolas Stemann</div>
+        <div class="production"><a href="https://www.schauspielhaus.ch/en/kalender/23961/riesenhaft-in-mittelerde" target="_blank" rel="noopener"><span class="prod-title">Riesenhaft in Mittelerde</span></a><span class="prod-meta">, 2023, Schiffbau-Halle, Schauspielhaus Zürich — Koproduktion mit dem Theater HORA und Das Helmi</span></div>
+        <div class="note">eingeladen zum Theatertreffen 2024</div>
+        <div class="production"><a href="https://www.schauspielhaus.ch/en/kalender/23910/sonne-los-jetzt" target="_blank" rel="noopener"><span class="prod-title">Sonne, los jetzt!</span></a><span class="prod-meta">, 2022, Pfauen, Schauspielhaus Zürich</span></div>
+        <div class="production"><a href="https://www.schauspielhaus.ch/de/kalender/19679/versammlung-fuer-einen-frosch" target="_blank" rel="noopener"><span class="prod-title">Versammlung für einen Frosch</span></a><span class="prod-meta">, 2020, Pfauen, Schauspielhaus Zürich</span></div>
+        <div class="production"><span class="prod-title">Borgen</span><span class="prod-meta">, 2016, Schaubühne Berlin</span></div>
+      </div>
+
+    </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Biography -->
+  <div class="section" id="biography">
+    <h2 class="section-heading">Biography</h2>
+    <div class="bio-layout">
+      <div class="bio-text">
+        <p>
+          Bendix Fesefeldt is an independent theatre maker. He studied political science in Paris, Tel Aviv and Berlin focussing on Middle Eastern Studies and interning at the <a href="https://www.institutfrancais-jerusalem.org/ramallah/" target="_blank" rel="noopener">Institut français</a> in Ramallah. After a brief detour into the private sector and some unsuccessful attempts in international NGO work, he started to work as a dramaturgy assistant at the international performing arts festival <a href="https://www.berlinerfestspiele.de/programm/archiv/foreign-affairs/2014" target="_blank" rel="noopener">Foreign Affairs</a> in Berlin in 2014 and to study theatre directing at the <a href="https://www.hfs-berlin.de/en/" target="_blank" rel="noopener">HfS Ernst Busch</a>.
+        </p>
+        <p>
+          After successfully dropping out of his theatre directing studies he started to work as an in house dramaturg in institutions such as <a href="https://www.residenztheater.de/en/" target="_blank" rel="noopener">Residenztheater</a> in Munich and <a href="https://www.schauspielhaus.ch/en/" target="_blank" rel="noopener">Schauspielhaus Zürich</a>. Alongside his institutional work, he also regularly worked in independent theatre contexts.
+        </p>
+        <p>
+          Since 2025 he works as an independent theatre maker, between dramaturgy, writing, directing and sometimes performing. Thematically, his work often connects themes of death and grief, desire and sexualised violence, and queer strategies of resistance.
+        </p>
+      </div>
+      <div class="bio-image">
+        <img src="portrait.png" alt="Bendix Fesefeldt" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="section" id="contact">
+    <h2 class="section-heading">Contact</h2>
+    <div class="contact-layout">
+      <div>
+        <a href="mailto:bendix.fesefeldt@gmail.com">bendix.fesefeldt@gmail.com</a>
+      </div>
+      <div class="contact-image">
+        <img src="8gsx8csg7oiy.jpg" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('header nav a');
+    const siteName = document.querySelector('.site-name');
+
+    function navigate(targetId) {
+      // swap active section
+      sections.forEach(s => s.classList.toggle('active', s.id === targetId));
+      // swap active nav link
+      navLinks.forEach(a => a.classList.toggle('active', a.dataset.target === targetId));
+      // scroll section back to top
+      const el = document.getElementById(targetId);
+      if (el) el.scrollTop = 0;
+    }
+
+    // nav links
+    navLinks.forEach(a => {
+      a.addEventListener('click', () => navigate(a.dataset.target));
+    });
+
+    // site name → home
+    siteName.addEventListener('click', () => navigate('home'));
+  </script>
+
+</body>
+</html>

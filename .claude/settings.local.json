@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/usr/bin/python3 *)",
+      "Bash(node -e \"console.log\\('ok'\\)\")",
+      "Bash(convert --version)",
+      "Bash(node -e \"require\\('fs'\\); console.log\\(process.version\\)\")",
+      "Read(//usr/local/lib/node_modules/**)",
+      "Read(//opt/homebrew/lib/**)",
+      "Bash(npm list *)",
+      "Bash(npm install *)",
+      "Bash(sudo npm *)",
+      "Bash(node *)"
+    ]
+  }
+}
